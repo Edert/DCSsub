@@ -108,7 +108,7 @@ if __name__ == '__main__':
 	parser.add_option("--rep_sd", default=0.1, dest="rep_sd", type="float", help="[Non peak reagion] Standard deviation of replicate read numbers [default: %default]")
 	parser.add_option("--rep_mean", default=0.9, dest="rep_mean", type="float", help="[Non peak reagion] Mean of replicate read numbers [default: %default]")
 	
-	parser.add_option("--frag-count-scaling", default="none", dest="frag_count_scaling", type="string", help="Scaling of fragment distribution, no scaling, scaling based on the fragment counts (with laplace) or scaling based on the beta result (with lognorm): none , frag , beta [default: %default]")
+	parser.add_option("--frag-count-scaling", default="none", dest="frag_count_scaling", type="string", help="Scaling of fragment distribution, no scaling, scaling of beta result based on fragment counts (with lognorm) or scaling of fragment counts based on beta result (with laplace) : none , frag , beta [default: %default]")
 	parser.add_option("--frag-count-lp-scale", default=0.1, dest="frag_count_lp_sc", type="float", help="Scale for Laplace distribution if frag-count-scaling is frag [default: %default]")
 	parser.add_option("--frag-count-ln-sigma", default=0.9, dest="frag_count_ln_si", type="float", help="Sigma for lognorm distribution if frag-count-scaling is beta [default: %default]")
 	parser.add_option("--frag-count-ln-scale", default=100, dest="frag_count_ln_sc", type="float", help="Scale for lognorm distribution if frag-count-scaling is beta [default: %default]")
@@ -184,7 +184,7 @@ if __name__ == '__main__':
 		#beta distribution to get aprox. same size or down regulated read number for sample x, here we deside which sample to prefer
 		read_frac = np.random.beta(options.beta_values[0], options.beta_values[1])
 		
-		#get number of reads in this reagion
+		#get number of reads in this region, name id nfragments like in DCSsim
 		number_frags = length(input_bam.fetch(region.chrom, region.start, region.end))
 		
 		#now choose which way we want to select the number of fragments
@@ -192,9 +192,9 @@ if __name__ == '__main__':
 			#no scaling, no changes in nfrags and beta
 			number_frags = number_frags
 			read_frac = read_frac
-		elif (options.frag_count_scaling == "beta") :#nfrags scaling via Laplace, beta not changed
+		elif (options.frag_count_scaling == "beta") :#nfrags scaling via Laplace based on beta result, beta not changed
 			number_frags = _scale_laplace(number_frags, read_frac, options.frag_count_lp_sc)
-		elif (options.frag_count_scaling == "frag") :#nfrags scaling via lognorm distribution, number_frags not changed
+		elif (options.frag_count_scaling == "frag") :#nfrags scaling via lognorm distribution based on fragment counts, number_frags not changed
 			read_frac = _scale_lognorm(number_frags, read_frac, options.frag_count_ln_si, options.frag_count_ln_sc)
 		else:
 			print("Unknown scaling method, %s, please choose 'none','frag' or 'beta', exiting now" % (frag_count_scaling))
