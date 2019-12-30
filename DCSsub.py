@@ -185,7 +185,7 @@ if __name__ == '__main__':
 		read_frac = np.random.beta(options.beta_values[0], options.beta_values[1])
 		
 		#get number of reads in this region, name id nfragments like in DCSsim
-		number_frags = length(input_bam.fetch(region.chrom, region.start, region.end))
+		number_frags = input_bam.count(region.chrom, region.start, region.end)
 		
 		#now choose which way we want to select the number of fragments
 		if( options.frag_count_scaling == "none"):
