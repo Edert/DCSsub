@@ -22,6 +22,7 @@ import sys
 from scipy.stats import truncnorm
 from future.utils import lrange
 from random import random
+from random import randrange
 from pybedtools import BedTool
 from optparse import OptionParser
 from numpy.random import dirichlet
@@ -216,7 +217,8 @@ if __name__ == '__main__':
 				read_counter+=1
 				
 				#get one random read out of region-pool
-				read = np.random.choice(read_pool)
+				random_index = randrange(len(read_pool))
+				read = read_pool[random_index]
 				
 				if random() <= read_frac: #add to sample 1 or sample 2 and to list
 					sample1_count += 1
