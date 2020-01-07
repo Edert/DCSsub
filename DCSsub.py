@@ -200,14 +200,23 @@ if __name__ == '__main__':
 			print("Unknown scaling method, %s, please choose 'none','frag' or 'beta', exiting now" % (frag_count_scaling))
 			exit(1)
 		
-		
+		#for each region change height based on beta distribution
 		read_counter=0
-		#for each read of the region change height based on beta distribution
+		read_pool=[]
+		
+		#first get all reads of this region
 		for read in input_bam.fetch(region.chrom, region.start, region.end):
+			read_pool.append(read)
+		
+		#then randomly select on of the reads for x-times
+		for _ in lrange(number_frags):
 			for _ in lrange(multi_factor): #do this x times
 				if(read_counter > number_frags): #check if we meet calculated and scaled (if turned on) number of fragments/reads
 					break
 				read_counter+=1
+				
+				#get one random read out of region-pool
+				read = np.random.choice(read_pool)
 				
 				if random() <= read_frac: #add to sample 1 or sample 2 and to list
 					sample1_count += 1
