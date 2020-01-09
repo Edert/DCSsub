@@ -66,9 +66,9 @@ def _scale_laplace(nfrags, read_frac, scale):
 		
 	return nfrags
 
-def _scale_lognorm(nfrags, read_frac, sigma, scale):
+def _scale_lognorm(nfrags, read_frac, sigma, loc, scale):
 	"""Scale number_frags result based on Lognorm distribution"""
-	loc=scale*-1
+	#loc=scale*-1
 	
 	top_beta_scale = sp.stats.lognorm.pdf(1,s=sigma,loc=loc, scale=scale)#to get to 100% at size 10
 	scale_factor=1/top_beta_scale #this is the factor to set beta_frac to 100% at 1
@@ -79,6 +79,23 @@ def _scale_lognorm(nfrags, read_frac, sigma, scale):
 	else:
 		read_frac = ((read_frac-0.5)*beta_scale)+0.5 #center and scale it based on beta_scale from exponential distri, so reduce to 0.5 for high values
 	return read_frac
+
+def _scale_exp(nfrags, read_frac, loc, scale):
+	"""Scale number_frags result based on Exponential distribution"""
+	
+	top_beta_scale = sp.stats.expon.pdf(loc,loc=loc, scale=scale)#to get to 100% at size loc
+	scale_factor=1/top_beta_scale #this is the factor to set beta_frac to 100% at 1
+	beta_scale = sp.stats.expon.pdf(nfrags,loc=loc, scale=scale) *scale_factor
+	
+	read_frac_old = read_frac
+	
+	if(beta_scale == 0):
+		read_frac = read_frac 
+	else:
+		read_frac = ((read_frac-0.5)*beta_scale)+0.5 #center and scale it based on beta_scale from exponential distribution, we do this to reduce the read_frac towards 0.5 for high values
+	
+	return read_frac
+
 
 def _reads_to_replicates(read_list, skewness, n_replicates):
 	"""puts reads in a randomly selected replicate"""
@@ -109,10 +126,10 @@ if __name__ == '__main__':
 	parser.add_option("--rep_sd", default=0.1, dest="rep_sd", type="float", help="[Non peak reagion] Standard deviation of replicate read numbers [default: %default]")
 	parser.add_option("--rep_mean", default=0.9, dest="rep_mean", type="float", help="[Non peak reagion] Mean of replicate read numbers [default: %default]")
 	
-	parser.add_option("--frag-count-scaling", default="none", dest="frag_count_scaling", type="string", help="Scaling of fragment distribution, no scaling, scaling of beta result based on fragment counts (with lognorm) or scaling of fragment counts based on beta result (with laplace) : none , frag , beta [default: %default]")
+	parser.add_option("--frag-count-scaling", default="none", dest="frag_count_scaling", type="string", help="Scaling of fragment distribution, no scaling, scaling of beta result based on fragment counts (with exp) or scaling of fragment counts based on beta result (with laplace) : none , frag , beta [default: %default]")
 	parser.add_option("--frag-count-lp-scale", default=0.1, dest="frag_count_lp_sc", type="float", help="Scale for Laplace distribution if frag-count-scaling is frag [default: %default]")
-	parser.add_option("--frag-count-ln-sigma", default=0.9, dest="frag_count_ln_si", type="float", help="Sigma for lognorm distribution if frag-count-scaling is beta [default: %default]")
-	parser.add_option("--frag-count-ln-scale", default=100, dest="frag_count_ln_sc", type="float", help="Scale for lognorm distribution if frag-count-scaling is beta [default: %default]")
+	parser.add_option("--frag-count-ex-loc", default=10, dest="frag_count_ex_lo", type="float", help="Loc for exponential distribution if frag-count-scaling is beta [default: %default]")
+	parser.add_option("--frag-count-ex-scale", default=100, dest="frag_count_ex_sc", type="float", help="Scale for exponential distribution if frag-count-scaling is beta [default: %default]")
 	
 	parser.add_option("-d", "--dp-thres", default=0.7, dest="dp_thres", type="float", help="Threshold of reads to define a DB peak [default: %default]")
 	parser.add_option("-m", "--min-counts", default=10, dest="min_counts", type="int", help="Minimum number of reads for a DB peak [default: %default]")
@@ -121,7 +138,7 @@ if __name__ == '__main__':
 	
 	parser.add_option("-s", "--skewness", default=10, dest="skewness", type="float", help="Variance between replicates (the higher, the less variance) [default: %default]")
 	
-	parser.add_option("--control_read_num", default=0, dest="num_control_reads", type="int", help="Number of reads in the input control Bam files, if 0 use mean of input control files[default: %default]")
+	parser.add_option("--control_read_num", default=0, dest="num_control_reads", type="int", help="Number of reads in the input control Bam files, if 0 use mean of input control files [default: %default]")
 	
 	parser.add_option("--out_bed", default="results.bed", dest="outbed_filename", type="string", help="Name of the results bed file [default: %default]")
 	parser.add_option("--out_sample", default="out", dest="output_name", type="string", help="Basename of the results Bam files [default: %default]")
@@ -196,7 +213,7 @@ if __name__ == '__main__':
 		elif (options.frag_count_scaling == "beta") :#nfrags scaling via Laplace based on beta result, beta not changed
 			number_frags = _scale_laplace(number_frags, read_frac, options.frag_count_lp_sc)
 		elif (options.frag_count_scaling == "frag") :#nfrags scaling via lognorm distribution based on fragment counts, number_frags not changed
-			read_frac = _scale_lognorm(number_frags, read_frac, options.frag_count_ln_si, options.frag_count_ln_sc)
+			read_frac = _scale_exp(number_frags, read_frac, options.frag_count_ex_lo, options.frag_count_ex_sc)
 		else:
 			print("Unknown scaling method, %s, please choose 'none','frag' or 'beta', exiting now" % (frag_count_scaling))
 			exit(1)

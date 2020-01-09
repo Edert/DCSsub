@@ -67,7 +67,7 @@ def _callback_list_float(option, opt, value, parser): #get a list of float optio
 		print("got exception: %r, please check input parameters" % (e,))
 		exit()
 
-def _scale_laplace(nfrags, read_frac, scale):
+def _scale_laplace(nfrags, read_frac, loc, scale):
 	"""Scale beta result based on Laplace distribution"""
 	loc = 0.5 #fixed
 	
@@ -82,9 +82,9 @@ def _scale_laplace(nfrags, read_frac, scale):
 		
 	return nfrags
 
-def _scale_lognorm(nfrags, read_frac, sigma, scale):
+def _scale_lognorm(nfrags, read_frac, sigma, loc, scale):
 	"""Scale number_frags result based on Lognorm distribution"""
-	loc=scale*-1
+	#loc=scale*-1
 	
 	top_beta_scale = sp.stats.lognorm.pdf(1,s=sigma,loc=loc, scale=scale)#to get to 100% at size 10
 	scale_factor=1/top_beta_scale #this is the factor to set beta_frac to 100% at 1
@@ -96,6 +96,22 @@ def _scale_lognorm(nfrags, read_frac, sigma, scale):
 		read_frac = ((read_frac-0.5)*beta_scale)+0.5 #center and scale it based on beta_scale from exponential distri, so reduce to 0.5 for high values
 	return read_frac
 
+def _scale_exp( nfrags, read_frac, loc, scale):
+	"""Scale number_frags result based on Exponential distribution"""
+	top_beta_scale = sp.stats.expon.pdf(loc,loc=loc, scale=scale)#to get to 100% at size loc
+	scale_factor=1/top_beta_scale #this is the factor to set beta_frac to 100% at loc
+	beta_scale = sp.stats.expon.pdf(nfrags,loc=loc, scale=scale) *scale_factor
+	read_frac_old = read_frac
+	
+	if(beta_scale == 0):
+		read_frac = read_frac 
+	else:
+		read_frac = ((read_frac-0.5)*beta_scale)+0.5 #center and scale it based on beta_scale from exponential distribution, we do this to reduce the read_frac towards 0.5 for high values
+	
+	#print("nfrags: %s read_frac_in: %s scaling_factor: %s read_frac_out: %s" % (nfrags ,read_frac_old, beta_scale, read_frac))
+	return read_frac
+
+
 #main
 if __name__ == '__main__':
 	#handle input arguments
@@ -103,10 +119,10 @@ if __name__ == '__main__':
 	
 	parser.add_option("-c", "--chrom", default='chr19', dest="chromosome", type="string", help="Chromosome used for simulation [default: %default]")
 
-	parser.add_option("--frag-count-scaling", default="none", dest="frag_count_scaling", type="string", help="Scaling of fragment distribution, no scaling, scaling of beta result based on fragment counts (with lognorm) or scaling of fragment counts based on beta result (with laplace) : none , frag , beta [default: %default]")
+	parser.add_option("--frag-count-scaling", default="none", dest="frag_count_scaling", type="string", help="Scaling of fragment distribution, no scaling, scaling of beta result based on fragment counts (with exp) or scaling of fragment counts based on beta result (with laplace) : none , frag , beta [default: %default]")
 	parser.add_option("--frag-count-lp-scale", default=0.1, dest="frag_count_lp_sc", type="float", help="Scale for Laplace distribution if frag-count-scaling is frag [default: %default]")
-	parser.add_option("--frag-count-ln-sigma", default=0.9, dest="frag_count_ln_si", type="float", help="Sigma for lognorm distribution if frag-count-scaling is beta [default: %default]")
-	parser.add_option("--frag-count-ln-scale", default=100, dest="frag_count_ln_sc", type="float", help="Scale for lognorm distribution if frag-count-scaling is beta [default: %default]")
+	parser.add_option("--frag-count-ex-loc", default=10, dest="frag_count_ex_lo", type="float", help="Loc for exponential distribution if frag-count-scaling is beta [default: %default]")
+	parser.add_option("--frag-count-ex-scale", default=100, dest="frag_count_ex_sc", type="float", help="Scale for exponential distribution if frag-count-scaling is beta [default: %default]")
 	
 	parser.add_option("--beta", default=[0.5, 0.5], dest="beta_values", type="string", action='callback', callback=_callback_list_float, help="Alpha and Beta of Beta-distribution [default: %default]")
 	
@@ -156,9 +172,9 @@ if __name__ == '__main__':
 			number_frags = number_frags
 			read_frac = read_frac
 		elif (options.frag_count_scaling == "beta") :#nfrags scaling via Laplace based on beta result, beta not changed
-			number_frags = _scale_laplace(number_frags, read_frac, options.frag_count_lp_sc)
+			number_frags = _scale_laplace(number_frags, read_frac, options.frag_count_lp_lo, options.frag_count_lp_sc)
 		elif (options.frag_count_scaling == "frag") :#nfrags scaling via lognorm distribution based on fragment counts, number_frags not changed
-			read_frac = _scale_lognorm(number_frags, read_frac, options.frag_count_ln_si, options.frag_count_ln_sc)
+			read_frac = _scale_exp(number_frags, read_frac, options.frag_count_ex_lo, options.frag_count_ex_sc)
 		else:
 			print("Unknown scaling method, %s, please choose 'none','frag' or 'beta', exiting now" % (frag_count_scaling))
 			exit(1)
