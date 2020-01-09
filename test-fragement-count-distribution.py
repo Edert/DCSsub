@@ -223,7 +223,10 @@ if __name__ == '__main__':
 			xma.append(x) 
 			y=math.log(entry[0]/entry[1],2)#log2 fold-change
 			yma.append(y) 
-
+	
+	
+	print("max: sum %s s1 %s s2 %s" % (max(sumcounts),max(counts1), max(counts2)))
+	
 	#hist and ma-plot
 	fixed_range=[0,200]
 	fixed_bins=500
