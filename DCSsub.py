@@ -212,7 +212,7 @@ if __name__ == '__main__':
 			read_frac = read_frac
 		elif (options.frag_count_scaling == "beta") :#nfrags scaling via Laplace based on beta result, beta not changed
 			number_frags = _scale_laplace(number_frags, read_frac, options.frag_count_lp_sc)
-		elif (options.frag_count_scaling == "frag") :#nfrags scaling via lognorm distribution based on fragment counts, number_frags not changed
+		elif (options.frag_count_scaling == "frag") :#nfrags scaling via exp distribution based on fragment counts, number_frags not changed
 			read_frac = _scale_exp(number_frags, read_frac, options.frag_count_ex_lo, options.frag_count_ex_sc)
 		else:
 			print("Unknown scaling method, %s, please choose 'none','frag' or 'beta', exiting now" % (frag_count_scaling))
