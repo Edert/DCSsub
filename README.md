@@ -1,8 +1,11 @@
-# DCSsub
+# Sub-sampling of differential ChIP-seq data
 
-DCSsub.py BAM BED TXT INT BAM,... [options]
+DCSsub sub-samples reads from one or more genuine ChIP-seq BAM files for two samples (e.g. treatment and control) in two or more replicates. We strongly encourage new users to start with test-fragement-count-distribution.py. This script should be used to test the parameter settings without creating fasta output files but creating informative plots.
 
-Based on the input BAM file(s), differential-peak regions will be sub-sampled in the provided BED regions, a TXT file with a list of chromosomes to be used and their length tab separated, INT defines the number of simulated replicates of the two samples, the input/control Bam files BAM,... comma-separated, will be used to create an input/control Bam file for the simulation.
+## DCSsub ##
+**DCSsub.py** \<BAM\> \<BED\> \<TXT\> \<INT\> \<BAM,...\> [options]
+
+Based on the input \<BAM\> file(s), differential-peak regions will be sub-sampled in the provided \<BED\> regions, a \<TXT\> file with a list of chromosomes to be used and their length tab separated, \<INT\> defines the number of simulated replicates of the two samples, the input/control Bam files \<BAM,...\> comma-separated, will be used to create an input/control Bam file for the simulation.
 
 Options:
 
@@ -44,3 +47,23 @@ Options:
 
 --out_control	Basename of the input/control Bam files, default="out"
 
+## test-fragement-count-distribution ##
+
+**test-fragement-count-distribution.py** \<BAM\> \<BED\> \<TXT\> \<INT\> [options]
+  
+Based on the input \<BAM\> file DE-peaks will be sub-sampled in the provided \<BED\> regions, \<TXT\> chromosomes to be used and their length tab separated, \<INT\> defines the number of simulated replicates of the two samples.
+  
+Options:
+  
+-c, --chrom	Chromosome used for simulation, default='chr19'
+  
+--frag-count-scaling	Scaling of read distribution, no scaling, scaling of beta result based on read counts (with exponential distribution) or scaling of read counts based on beta result (with Laplace distribution): none, frag, beta, default="none"
+  
+--frag-count-lp-scale	Scale for Laplace distribution if frag-count-scaling is frag, default=0.1
+  
+--frag-count-ex-loc	Loc for exponential distribution if frag-count-scaling is beta, default=10
+  
+--frag-count-ex-scale	Scale for exponential distribution if frag-count-scaling is beta, default=100
+  
+--beta	Alpha and Beta of Beta-distribution, default=[0.5, 0.5]
+  
