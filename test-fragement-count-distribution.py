@@ -4,7 +4,7 @@
 """
 %prog <BAM> <BED> <TXT> <INT> [options]
 
-Based on the input <BAM> file DE-peaks will be simulated in the provided <BED> regions, <TXT> chromosmes to be used and their length tab separated, 
+Based on the input <BAM> file DE-peaks will be sub-sampled in the provided <BED> regions, <TXT> chromosmes to be used and their length tab separated, 
 <INT> defines the number of simulated replicates of the two samples
 
 Creates a histogram of all fragments count distribution based on regions from <BED> of <INT> replicates for two samples, for all samples, for sample1 and sample2 and creates an MA-plot based on the supplied beta-values
