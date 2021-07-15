@@ -57,13 +57,13 @@ Options:
   
 -c, --chrom	Chromosome used for simulation, default='chr19'
   
---frag-count-scaling	Scaling of read distribution, no scaling, scaling of beta result based on read counts (with exponential distribution) or scaling of read counts based on beta result (with Laplace distribution): none, frag, beta, default="none"
+--read-count-scaling	Scaling of read distribution, no scaling, scaling of beta result based on read counts (with exponential distribution) or scaling of read counts based on beta result (with Laplace distribution): none, frag, beta, default="none"
   
---frag-count-lp-scale	Scale for Laplace distribution if frag-count-scaling is frag, default=0.1
+--read-count-lp-scale	Scale for Laplace distribution if read-count-scaling is frag, default=0.1
   
---frag-count-ex-loc	Loc for exponential distribution if frag-count-scaling is beta, default=10
+--read-count-ex-loc	Loc for exponential distribution if read-count-scaling is beta, default=10
   
---frag-count-ex-scale	Scale for exponential distribution if frag-count-scaling is beta, default=100
+--read-count-ex-scale	Scale for exponential distribution if read-count-scaling is beta, default=100
   
 --beta	Alpha and Beta of Beta-distribution, default=[0.5, 0.5]
   
