@@ -4,7 +4,7 @@
 """
 %prog <BAM> <BED> <TXT> <INT> <BAM,...> [options]
 
-Based on the input <BAM> file DE-peaks will be sub-sampled in the provided <BED> regions, <TXT> chromosmes to be used and their length tab separated, 
+Based on the input <BAM> file DE-peaks will be simulated in the provided <BED> regions, <TXT> chromosmes to be used and their length tab separated, 
 <INT> defines the number of simulated replicates of the two samples,
 the input/control Bam files <BAM,...> comma-separated, will be used to create an input/control Bam file for the simulation.
 @author: Thomas Eder
@@ -116,20 +116,20 @@ if __name__ == '__main__':
 	
 	#handle input arguments
 	parser = HelpfulOptionParser(usage=__doc__)
-	parser.add_option("-c", "--chrom", default='chr19', dest="chromosome", type="string", help="Chromosome used for sub-sampling [default: %default]")
+	parser.add_option("-c", "--chrom", default='chr19', dest="chromosome", type="string", help="Chromosome used for simulation [default: %default]")
 	parser.add_option("-r", "--read_length", default=50, dest="read_length", type="int", help="Read length [default: %default]")
 	
 	parser.add_option("-b","--beta", default=[0.5, 0.5], dest="beta_values", type="string", action='callback', callback=_callback_list_float, help="Alpha and Beta of Beta-distribution [default: %default]")
 	
-	parser.add_option("--max_reads", default=1, dest="max_reads", type="float", help="[Non peak region] Maximum percentage of reads for replicates [default: %default]")
-	parser.add_option("--min_reads", default=0, dest="min_reads", type="float", help="[Non peak region] Minimum percentage of reads for replicates [default: %default]")
-	parser.add_option("--rep_sd", default=0.1, dest="rep_sd", type="float", help="[Non peak region] Standard deviation of replicate read numbers [default: %default]")
-	parser.add_option("--rep_mean", default=0.9, dest="rep_mean", type="float", help="[Non peak region] Mean of replicate read numbers [default: %default]")
+	parser.add_option("--max_reads", default=1, dest="max_reads", type="float", help="[Non peak reagion] Maximum percentage of reads for repcilates [default: %default]")
+	parser.add_option("--min_reads", default=0, dest="min_reads", type="float", help="[Non peak reagion] Minimum percentage of reads for repcilates [default: %default]")
+	parser.add_option("--rep_sd", default=0.1, dest="rep_sd", type="float", help="[Non peak reagion] Standard deviation of replicate read numbers [default: %default]")
+	parser.add_option("--rep_mean", default=0.9, dest="rep_mean", type="float", help="[Non peak reagion] Mean of replicate read numbers [default: %default]")
 	
-	parser.add_option("--read-count-scaling", default="none", dest="frag_count_scaling", type="string", help="Scaling of read distribution, no scaling, scaling of beta result based on read counts (with exponential distribution) or scaling of read counts based on beta result (with Laplace distribution): none, frag, beta [default: %default]")
-	parser.add_option("--read-count-lp-scale", default=0.1, dest="frag_count_lp_sc", type="float", help="Scale for Laplace distribution if read-count-scaling is frag [default: %default]")
-	parser.add_option("--read-count-ex-loc", default=10, dest="frag_count_ex_lo", type="float", help="Loc for exponential distribution if read-count-scaling is beta [default: %default]")
-	parser.add_option("--read-count-ex-scale", default=100, dest="frag_count_ex_sc", type="float", help="Scale for exponential distribution if read-count-scaling is beta [default: %default]")
+	parser.add_option("--frag-count-scaling", default="none", dest="frag_count_scaling", type="string", help="Scaling of fragment distribution, no scaling, scaling of beta result based on fragment counts (with exp) or scaling of fragment counts based on beta result (with laplace) : none , frag , beta [default: %default]")
+	parser.add_option("--frag-count-lp-scale", default=0.1, dest="frag_count_lp_sc", type="float", help="Scale for Laplace distribution if frag-count-scaling is frag [default: %default]")
+	parser.add_option("--frag-count-ex-loc", default=10, dest="frag_count_ex_lo", type="float", help="Loc for exponential distribution if frag-count-scaling is beta [default: %default]")
+	parser.add_option("--frag-count-ex-scale", default=100, dest="frag_count_ex_sc", type="float", help="Scale for exponential distribution if frag-count-scaling is beta [default: %default]")
 	
 	parser.add_option("-d", "--dp-thres", default=0.7, dest="dp_thres", type="float", help="Threshold of reads to define a DB peak [default: %default]")
 	parser.add_option("-m", "--min-counts", default=10, dest="min_counts", type="int", help="Minimum number of reads for a DB peak [default: %default]")

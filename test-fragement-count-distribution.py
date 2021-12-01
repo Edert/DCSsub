@@ -119,10 +119,10 @@ if __name__ == '__main__':
 	
 	parser.add_option("-c", "--chrom", default='chr19', dest="chromosome", type="string", help="Chromosome used for simulation [default: %default]")
 
-	parser.add_option("--read-count-scaling", default="none", dest="frag_count_scaling", type="string", help="Scaling of read distribution, no scaling, scaling of beta result based on read counts (with exp) or scaling of read counts based on beta result (with laplace) : none , frag , beta [default: %default]")
-	parser.add_option("--read-count-lp-scale", default=0.1, dest="frag_count_lp_sc", type="float", help="Scale for Laplace distribution if read-count-scaling is frag [default: %default]")
-	parser.add_option("--read-count-ex-loc", default=10, dest="frag_count_ex_lo", type="float", help="Loc for exponential distribution if read-count-scaling is beta [default: %default]")
-	parser.add_option("--read-count-ex-scale", default=100, dest="frag_count_ex_sc", type="float", help="Scale for exponential distribution if read-count-scaling is beta [default: %default]")
+	parser.add_option("--frag-count-scaling", default="none", dest="frag_count_scaling", type="string", help="Scaling of fragment distribution, no scaling, scaling of beta result based on fragment counts (with exp) or scaling of fragment counts based on beta result (with laplace) : none , frag , beta [default: %default]")
+	parser.add_option("--frag-count-lp-scale", default=0.1, dest="frag_count_lp_sc", type="float", help="Scale for Laplace distribution if frag-count-scaling is frag [default: %default]")
+	parser.add_option("--frag-count-ex-loc", default=10, dest="frag_count_ex_lo", type="float", help="Loc for exponential distribution if frag-count-scaling is beta [default: %default]")
+	parser.add_option("--frag-count-ex-scale", default=100, dest="frag_count_ex_sc", type="float", help="Scale for exponential distribution if frag-count-scaling is beta [default: %default]")
 	
 	parser.add_option("--beta", default=[0.5, 0.5], dest="beta_values", type="string", action='callback', callback=_callback_list_float, help="Alpha and Beta of Beta-distribution [default: %default]")
 	

@@ -23,13 +23,13 @@ Options:
 
 --rep_mean	[Non peak region] Mean of replicate read numbers, default=0.9
 
---read-count-scaling	Scaling of read distribution, no scaling, scaling of beta result based on read counts (with exponential distribution) or scaling of read counts based on beta result (with Laplace distribution): none, frag, beta, default="none"
+--frag-count-scaling	Scaling of frag distribution, no scaling, scaling of beta result based on read counts (with exponential distribution) or scaling of read counts based on beta result (with Laplace distribution): none, frag, beta, default="none"
 
--- read -count-lp-scale	Scale for Laplace distribution if read -count-scaling is frag, default=0.1
+--frag-count-lp-scale	Scale for Laplace distribution if frag-count-scaling is frag, default=0.1
 
--- read -count-ex-loc	Loc for exponential distribution if read -count-scaling is beta, default=10
+--frag-count-ex-loc	Loc for exponential distribution if frag-count-scaling is beta, default=10
 
--- read -count-ex-scale	Scale for exponential distribution if read -count-scaling is beta, default=100
+--frag-count-ex-scale	Scale for exponential distribution if frag-count-scaling is beta, default=100
 
 -d, --dp-thres	Threshold of reads to define a DB peak , default=0.7
 
@@ -57,13 +57,13 @@ Options:
   
 -c, --chrom	Chromosome used for simulation, default='chr19'
   
---read-count-scaling	Scaling of read distribution, no scaling, scaling of beta result based on read counts (with exponential distribution) or scaling of read counts based on beta result (with Laplace distribution): none, frag, beta, default="none"
+--frag-count-scaling	Scaling of read distribution, no scaling, scaling of beta result based on frag counts (with exponential distribution) or scaling of frag counts based on beta result (with Laplace distribution): none, frag, beta, default="none"
   
---read-count-lp-scale	Scale for Laplace distribution if read-count-scaling is frag, default=0.1
+--frag-count-lp-scale	Scale for Laplace distribution if frag-count-scaling is frag, default=0.1
   
---read-count-ex-loc	Loc for exponential distribution if read-count-scaling is beta, default=10
+--frag-count-ex-loc	Loc for exponential distribution if frag-count-scaling is beta, default=10
   
---read-count-ex-scale	Scale for exponential distribution if read-count-scaling is beta, default=100
+--frag-count-ex-scale	Scale for exponential distribution if frag-count-scaling is beta, default=100
   
 --beta	Alpha and Beta of Beta-distribution, default=[0.5, 0.5]
   
