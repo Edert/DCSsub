@@ -127,9 +127,9 @@ if __name__ == '__main__':
 	parser.add_option("--rep_mean", default=0.9, dest="rep_mean", type="float", help="[Non peak reagion] Mean of replicate read numbers [default: %default]")
 	
 	parser.add_option("--frag-count-scaling", default="none", dest="frag_count_scaling", type="string", help="Scaling of fragment distribution, no scaling, scaling of beta result based on fragment counts (with exp) or scaling of fragment counts based on beta result (with laplace) : none , frag , beta [default: %default]")
-	parser.add_option("--frag-count-lp-scale", default=0.1, dest="frag_count_lp_sc", type="float", help="Scale for Laplace distribution if frag-count-scaling is frag [default: %default]")
-	parser.add_option("--frag-count-ex-loc", default=10, dest="frag_count_ex_lo", type="float", help="Loc for exponential distribution if frag-count-scaling is beta [default: %default]")
-	parser.add_option("--frag-count-ex-scale", default=100, dest="frag_count_ex_sc", type="float", help="Scale for exponential distribution if frag-count-scaling is beta [default: %default]")
+	parser.add_option("--frag-count-lp-scale", default=0.1, dest="frag_count_lp_sc", type="float", help="Scale for Laplace distribution if frag-count-scaling is beta [default: %default]")
+	parser.add_option("--frag-count-ex-loc", default=10, dest="frag_count_ex_lo", type="float", help="Loc for exponential distribution if frag-count-scaling is frag [default: %default]")
+	parser.add_option("--frag-count-ex-scale", default=100, dest="frag_count_ex_sc", type="float", help="Scale for exponential distribution if frag-count-scaling is frag [default: %default]")
 	
 	parser.add_option("-d", "--dp-thres", default=0.7, dest="dp_thres", type="float", help="Threshold of reads to define a DB peak [default: %default]")
 	parser.add_option("-m", "--min-counts", default=10, dest="min_counts", type="int", help="Minimum number of reads for a DB peak [default: %default]")
