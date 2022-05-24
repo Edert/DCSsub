@@ -67,3 +67,9 @@ Options:
   
 --beta	Alpha and Beta of Beta-distribution, default=[0.5, 0.5]
   
+ 
+## Citation ##
+
+If you are using this tool or parts of it in your research, please cite:
+
+Eder, T., Grebien, F. Comprehensive assessment of differential ChIP-seq tools guides optimal algorithm selection. Genome Biol 23, 119 (2022). https://doi.org/10.1186/s13059-022-02686-y
